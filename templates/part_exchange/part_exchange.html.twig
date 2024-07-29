@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Part Exchange Request</title>
+</head>
+<body>
+<h1>Part Exchange Request</h1>
+<table style="width: 100%; border-collapse: collapse;">
+    <tr style="background-color: #f2f2f2;">
+        <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Field</th>
+        <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Value</th>
+    </tr>
+    {% for field, value in data %}
+        <tr>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ field|title }}</td>
+            <td style="padding: 8px; border: 1px solid #ddd;">{{ value }}</td>
+        </tr>
+    {% endfor %}
+</table>
+</body>
+</html>

@@ -1,0 +1,231 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{controller_name}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        #carContainer {
+            margin: 10px auto;
+            background-color: #fff;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .car-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .car-images {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: auto;
+        }
+
+        .prev-button, .next-button {
+            color: #4ab00a;
+            font-size: 24px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .prev-button .fa, .next-button .fa {
+            font-size: 24px;
+        }
+
+        .car-info {
+            padding: 10px;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .price-section {
+            display: flex;
+            align-items: baseline;
+            margin: 20px 0;
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e60000;
+            margin-right: 10px;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .enquiry-button {
+            background-color: #e60000;
+            color: #fff;
+        }
+
+        .secure-button {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .exchange-button {
+            background-color: #f0ad4e;
+            color: #fff;
+        }
+
+        .finance-button {
+            background-color: #5bc0de;
+            color: #fff;
+        }
+
+        .chat-button {
+            background-color: #5cb85c;
+            color: #fff;
+        }
+
+        .specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .spec {
+            flex: 1 1 45%;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .value {
+            color: #666;
+        }
+
+        @media (min-width: 768px) {
+            .car-details {
+                flex-direction: row;
+            }
+
+            .car-images {
+                flex: 2;
+                margin-bottom: 0;
+            }
+
+            .car-info {
+                flex: 1;
+                padding: 20px;
+            }
+
+            .actions {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+
+    <div class="container-fluid-custom" id="carContainer">
+        <div class="row car-details">
+            <div class="col-12 col-md-6 car-images">
+                <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        {% for image in car.carImage %}
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ loop.index0 }}"
+                                    class="{{ loop.first ? 'active' }}" aria-current="{{ loop.first ? 'true' }}" aria-label="Slide {{ loop.index }}"></button>
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-inner">
+                        {% for image in car.carImage %}
+                            <div class="carousel-item {{ loop.first ? 'active' }}">
+                                <img src="{{ asset('uploads/car_images/' ~ image.path) }}" class="d-block w-100 main-image" alt="Car Image {{ loop.index }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev prev-button" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="prev">
+                        <i class="fa fa-chevron-left"></i>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next next-button" type="button" data-bs-target="#carouselExampleIndicators"
+                            data-bs-slide="next">
+                        <i class="fa fa-chevron-right"></i>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 car-info">
+                <h1>{{ car.make }} {{ car.model }}</h1>
+                <p>{{ car.engineSize }}cc {{ car.fuel }} {{ car.emissionClass }}</p>
+                <div class="price-section">
+                    <div class="price">£{{ car.price }}</div>
+                </div>
+                {% if not car.sold %}
+                    <div class="actions">
+                        <a href="{{ path('app_contact_us') }}" class="button enquiry-button">Make Enquiry</a>
+                        <a href="{{ path('app_part_exchange') }}" class="button exchange-button">Part Exchange your Car</a>
+                        <a href="https://wa.me/+447882016244?text=I%20am%20interested%20in%20the%20{{ car.make }}%20{{ car.model }}" class="button chat-button" target="_blank">Chat with Us</a>
+                    </div>
+                {% endif %}
+                <div class="specs">
+                    <div class="spec">
+                        <span class="label">Year</span>
+                        <span class="value">{{ car.year }}</span>
+                    </div>
+                    <div class="spec">
+                        <span class="label">Odometer</span>
+                        <span class="value">{{ car.mileage }} miles</span>
+                    </div>
+                    <div class="spec">
+                        <span class="label">Transmission</span>
+                        <span class="value">{{ car.transmission }}</span>
+                    </div>
+                    <div class="spec">
+                        <span class="label">Fuel Type</span>
+                        <span class="value">{{ car.fuel }}</span>
+                    </div>
+                    <div class="spec">
+                        <span class="label">Doors</span>
+                        <span class="value">{{ car.doors }}</span>
+                    </div>
+                    <div class="spec">
+                        <span class="label">Colour</span>
+                        <span class="value">{{ car.colour }}</span>
+                    </div>
+                    <div class="spec">
+                        <span class="label">Engine Size</span>
+                        <span class="value">{{ car.engineSize }}</span>
+                    </div>
+                </div>
+                <div>
+                    <p>Vehicle Overview</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
