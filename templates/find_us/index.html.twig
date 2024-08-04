@@ -1,20 +1,35 @@
+{# templates/find_us/index.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Find Us{% endblock %}
 
 {% block customPageStylesheet %}
     <style>
-        #map { height: 600px; }
+        #map {
+            height: 400px;  /* Adjust the height as needed */
+            width: 100%;
+        }
     </style>
 {% endblock %}
 
+{% block pageJavascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK6ffRzpsre3mBa_hI-nxKZY22-p02ghU&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            const location = { lat: 53.474722, lng: -2.219030 };  // Set the coordinates for your location
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: location
+            });
+            const marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+    </script>
+{% endblock %}
+
 {% block body %}
-    <h1>Find Us</h1>
-
+    <h1>Find us</h1>
     <div id="map"></div>
-
-    {% block pageJavascripts %}
-        <!-- Include Google Maps JavaScript API -->
-
-    {% endblock %}
 {% endblock %}

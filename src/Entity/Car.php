@@ -65,6 +65,9 @@ class Car
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $DateAdded = null;
 
+    #[ORM\Column(length: 20)]
+    private ?string $HPI;
+
     #[Pure] public function __construct()
     {
         $this->carImage = new ArrayCollection();
@@ -272,6 +275,18 @@ class Car
     public function setDateAdded(\DateTimeInterface $DateAdded): static
     {
         $this->DateAdded = $DateAdded;
+
+        return $this;
+    }
+
+    public function getHPI(): ?string
+    {
+        return $this->HPI;
+    }
+
+    public function setHPI(string $HPI): static
+    {
+        $this->HPI = $HPI;
 
         return $this;
     }

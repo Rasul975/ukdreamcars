@@ -16,11 +16,6 @@
             align-items: flex-end; /* Align items to the bottom */
         }
 
-        /*.card-custom img {*/
-        /*    width: 100%;*/
-        /*    height: auto;*/
-        /*}*/
-
         .darker {
             background-color: #f8f9fa;
             padding: 30px;
@@ -35,10 +30,6 @@
             .jumbotron {
                 height: 400px;
             }
-
-            /*.container-fluid-custom {*/
-            /*    padding: 15px;*/
-            /*}*/
 
             .darker, .custom2 {
                 padding: 15px;
@@ -136,10 +127,9 @@
     </div>
 
     <div class="container-fluid py-5">
-        <div class="row g-3">
+        <div class="row">
             {% if cars %}
                 {% for car in cars %}
-
                     <div class="col-lg-4 col-md-6 col-12">
                         <a href="{{ path('app_inventory') }}" class="card-link">
                             <div class="card card-custom">
@@ -167,10 +157,10 @@
                             </div>
                         </a>
                     </div>
-
                 {% endfor %}
+            {% else %}
+                <h1>No cars available</h1>
             {% endif %}
         </div>
     </div>
-
 {% endblock %}

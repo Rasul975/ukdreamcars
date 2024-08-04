@@ -53,6 +53,8 @@ class InventoryController extends AbstractController
         $make = $request->query->get('make', '');
         $model = $request->query->get('model', '');
         $price = $request->query->get('price', '');
+        $sortField = $request->query->get('sortField', '');
+        $sortDirection = $request->query->get('sortDirection', 'ASC');
 
         if (!empty($make)) {
             $queryBuilder->andWhere('c.make = :make')
@@ -65,6 +67,11 @@ class InventoryController extends AbstractController
         if (!empty($price)) {
             $queryBuilder->andWhere('c.price <= :price')
                 ->setParameter('price', (int)$price);
+        }
+
+        // Apply sorting
+        if (!empty($sortField)) {
+            $queryBuilder->orderBy("c.$sortField", $sortDirection);
         }
 
         // Paginate the results
@@ -80,6 +87,8 @@ class InventoryController extends AbstractController
             'distinctModels' => $distinctModels,
             'selectedMake' => $selectedMake,
             'controller_name' => 'Inventory | UK Dream Cars',
+            'sortField' => $sortField,
+            'sortDirection' => $sortDirection,
         ]);
     }
 

@@ -132,6 +132,21 @@
                         <option value="50000">Up to £50,000</option>
                     </select>
                 </div>
+                <div class="col-md-3 col-6">
+                    <label for="sortField" class="form-label">Sort By</label>
+                    <select id="sortField" name="sortField" class="form-control">
+                        <option value="">Select Field</option>
+                        <option value="year" {% if sortField == 'year' %}selected{% endif %}>Year</option>
+                        <option value="price" {% if sortField == 'price' %}selected{% endif %}>Price</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-6">
+                    <label for="sortDirection" class="form-label">Order</label>
+                    <select id="sortDirection" name="sortDirection" class="form-control">
+                        <option value="ASC" {% if sortDirection == 'ASC' %}selected{% endif %}>Ascending</option>
+                        <option value="DESC" {% if sortDirection == 'DESC' %}selected{% endif %}>Descending</option>
+                    </select>
+                </div>
                 <div class="col-md-3 col-6 d-flex align-items-end">
                     <button type="submit" class="btn btn-success me-2 w-100">Search</button>
                     <button type="submit" class="btn btn-danger w-100" onclick="resetForm()">Reset</button>
@@ -184,10 +199,11 @@
 
     <script>
         function resetForm() {
-            // Set default values for each select element
             document.getElementById('make').value = '';
             document.getElementById('model').value = '';
             document.getElementById('price').value = '';
+            document.getElementById('sortField').value = '';
+            document.getElementById('sortDirection').value = 'ASC';
         }
     </script>
 
