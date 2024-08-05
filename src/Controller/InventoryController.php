@@ -101,6 +101,7 @@ class InventoryController extends AbstractController
             return $this->redirectToRoute('app_inventory');
         }
 
+
         return $this->render('inventory/car_details.html.twig', [
             'car' => $car,
             'controller_name' => 'Car Details | UK Dream Cars',
