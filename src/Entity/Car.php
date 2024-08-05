@@ -66,7 +66,7 @@ class Car
     private ?\DateTimeInterface $DateAdded = null;
 
     #[ORM\Column(length: 20)]
-    private ?string $HPI;
+    private ?string $hpi;
 
     #[Pure] public function __construct()
     {
@@ -279,14 +279,14 @@ class Car
         return $this;
     }
 
-    public function getHPI(): ?string
+    public function getHpi(): ?string
     {
-        return $this->HPI;
+        return $this->hpi;
     }
 
-    public function setHPI(string $HPI): static
+    public function setHpi(string $hpi): static
     {
-        $this->HPI = $HPI;
+        $this->hpi = $hpi;
 
         return $this;
     }

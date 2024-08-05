@@ -23,18 +23,10 @@
             {{ form_label(carForm.registration) }}
             {{ form_widget(carForm.registration, {'attr': {'class': 'form-control'}}) }}
         </div>
-{#        <div class="form-group">#}
-{#            {{ form_label(carForm.make) }}#}
-{#            {{ form_widget(carForm.make, {'attr': {'class': 'form-control'}}) }}#}
-{#        </div>#}
         <div class="form-group">
             {{ form_label(carForm.model) }}
             {{ form_widget(carForm.model, {'attr': {'class': 'form-control'}}) }}
         </div>
-{#        <div class="form-group">#}
-{#            {{ form_label(carForm.colour) }}#}
-{#            {{ form_widget(carForm.colour, {'attr': {'class': 'form-control'}}) }}#}
-{#        </div>#}
         <div class="form-group">
             {{ form_label(carForm.mileage) }}
             {{ form_widget(carForm.mileage, {'attr': {'class': 'form-control', 'type': 'number'}}) }}
@@ -47,27 +39,14 @@
             {{ form_label(carForm.horsepower) }}
             {{ form_widget(carForm.horsepower, {'attr': {'class': 'form-control', 'type': 'number'}}) }}
         </div>
-{#        <div class="form-group">#}
-{#            {{ form_label(carForm.engineSize) }}#}
-{#            {{ form_widget(carForm.engineSize, {'attr': {'class': 'form-control', 'type': 'number'}}) }}#}
-{#        </div>#}
-{#        <div class="form-group">#}
-{#            {{ form_label(carForm.year) }}#}
-{#            {{ form_widget(carForm.year, {'attr': {'class': 'form-control', 'type': 'number'}}) }}#}
-{#        </div>#}
+        <div class="form-group">
+            {{ form_label(carForm.hpi) }}
+            {{ form_widget(carForm.hpi, {'attr': {'class': 'form-control'}}) }}
+        </div>
         <div class="form-group">
             {{ form_label(carForm.transmission) }}
             {{ form_widget(carForm.transmission, {'attr': {'class': 'form-control'}}) }}
         </div>
-{#        <div class="form-group">#}
-{#            {{ form_label(carForm.fuel) }}#}
-{#            {{ form_widget(carForm.fuel, {'attr': {'class': 'form-control'}}) }}#}
-{#        </div>#}
-
-{#        <div class="form-group">#}
-{#            {{ form_label(carForm.emission_class) }}#}
-{#            {{ form_widget(carForm.emission_class, {'attr': {'class': 'form-control', 'type': 'number'}}) }}#}
-{#        </div>#}
         <div class="form-group">
             {{ form_label(carForm.price) }}
             {{ form_widget(carForm.price, {'attr': {'class': 'form-control', 'type': 'number'}}) }}

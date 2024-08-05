@@ -18,17 +18,8 @@ class CarFormType extends AbstractType
 
         $builder
             ->add('registration')
-//            ->add('make')
             ->add('model')
-//            ->add('colour')
-//            ->add('engineSize', IntegerType::class)
             ->add('mileage', IntegerType::class)
-//            ->add('year', ChoiceType::class, [
-//                'choices' => array_combine($years, $years), // Associative array of years
-//                'placeholder' => 'Select year',
-//                'required' => true,
-//                'attr' => ['class' => 'form-control']
-//            ])
 
             ->add('transmission', ChoiceType::class, [
                 'choices' => [
@@ -40,32 +31,16 @@ class CarFormType extends AbstractType
                 'required' => true,
                 'attr' => ['class' => 'form-control']
             ])
-//            ->add('fuel', ChoiceType::class, [
-//                'choices' => [
-//                    'Petrol' => 'Petrol',
-//                    'Diesel' => 'Diesel',
-//                    'Electric' => 'Electric',
-//                    'Hybrid' => 'Hybrid',
-//                    'Other' => 'Other',
-//                ],
-//                'placeholder' => 'Select fuel type',
-//                'required' => true,
-//                'attr' => ['class' => 'form-control']
-//            ])
-
-//            ->add('emission_class', ChoiceType::class, [
-//                'choices' => [
-//                    'Euro 1' => 1,
-//                    'Euro 2' => 2,
-//                    'Euro 3' => 3,
-//                    'Euro 4' => 4,
-//                    'Euro 5' => 5,
-//                    'Euro 6' => 6,
-//                ],
-//                'placeholder' => 'Select emission class',
-//                'required' => true,
-//                'attr' => ['class' => 'form-control']
-//            ])
+            ->add('hpi', ChoiceType::class, [
+                'choices' => [
+                    'S' => 'S',
+                    'N' => 'N',
+                    'Clear' => 'Clear',
+                ],
+                'placeholder' => 'Select HPI',
+                'required' => true,
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('price', IntegerType::class)
             ->add('doors', IntegerType::class)
             ->add('horsepower', IntegerType::class)

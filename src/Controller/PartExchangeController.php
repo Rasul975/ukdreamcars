@@ -25,7 +25,7 @@ class PartExchangeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $apiKey =  $_ENV['API_KEY_MAIL'];;
+            $apiKey =  $_ENV['API_KEY_MAIL'];
             $mailtrap = new MailtrapClient(new Config($apiKey));
 
             $email = (new Email())
