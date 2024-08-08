@@ -11,6 +11,14 @@
     </style>
 {% endblock %}
 
+{% block body %}
+    <div class="container-fluid d-flex flex-column justify-content-center align-items-center">
+        <h1>Find us</h1>
+        <div id="map"></div>
+        <button id="directions-button" class="btn btn-primary mt-3" onclick="getDirections()">Get Directions</button>
+    </div>
+{% endblock %}
+
 {% block pageJavascripts %}
     <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
     <script>
@@ -27,17 +35,9 @@
         }
 
         function getDirections() {
-            const destination = '53.474722,-2.219030';  // Set the coordinates for your location
+            const destination = '53.474722,-2.219030';
             const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
             window.open(url, '_blank');
         }
     </script>
-{% endblock %}
-
-{% block body %}
-    <div class="container-fluid d-flex flex-column justify-content-center align-items-center">
-        <h1>Find us</h1>
-        <div id="map"></div>
-        <button id="directions-button" class="btn btn-primary mt-3" onclick="getDirections()">Get Directions</button>
-    </div>
 {% endblock %}
