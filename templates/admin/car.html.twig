@@ -9,24 +9,37 @@
 {% endblock %}
 
 {% block dashboard_content %}
-    <h1>{{ car.make }} {{ car.model }}</h1>
-    <p>Registration: {{ car.registration }}</p>
-    <p>Year: {{ car.year }}</p>
-    <p>Mileage: {{ car.mileage }}</p>
-
-    <h2>Upload Image</h2>
-    {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
-    {{ form_widget(form.image) }}
-    <button type="submit" class="btn btn-primary">Upload</button>
-    {{ form_end(form) }}
-
     <div>
-        {% if car.sold%}
-            <a href="{{ path('app_admin_car_available', {'id': car.id}) }}" class="btn btn-success">Mark as Available</a>
-        {% else %}
-            <a href="{{ path('app_admin_car_sold', {'id': car.id}) }}" class="btn btn-success">Mark as Sold</a>
-        {% endif %}
+        <h1>{{ car.make }} {{ car.model }}</h1>
+        <p>Registration: {{ car.registration }}</p>
+        <p>Year: {{ car.year }}</p>
+        <p>Mileage: {{ car.mileage }}</p>
     </div>
+
+    <div class="row">
+        <div class="col-8">
+            <h2>Upload Image</h2>
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_widget(form.image) }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+            {{ form_end(form) }}
+
+            {% if car.sold%}
+                <a href="{{ path('app_admin_car_available', {'id': car.id}) }}" class="btn btn-success">Mark as Available</a>
+            {% else %}
+                <a href="{{ path('app_admin_car_sold', {'id': car.id}) }}" class="btn btn-success">Mark as Sold</a>
+            {% endif %}
+        </div>
+        <div class="col-4">
+            <h2>Add Features</h2>
+
+            {{ form_start(featuresForm) }}
+            {{ form_widget(featuresForm) }}
+            <button type="submit" class="btn btn-primary">Add Feature</button>
+            {{ form_end(featuresForm) }}
+        </div>
+    </div>
+
 
     <h2>Images</h2>
     <div class="row">

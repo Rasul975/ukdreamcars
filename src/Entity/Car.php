@@ -63,14 +63,18 @@ class Car
     private Collection $carImage;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $DateAdded = null;
+    private ?\DateTimeInterface $DateAdded;
 
     #[ORM\Column(length: 20)]
     private ?string $hpi;
 
+    #[ORM\Column(nullable: true)]
+    private ?array $features = null;
+
     #[Pure] public function __construct()
     {
         $this->carImage = new ArrayCollection();
+        $this->features = [];
     }
 
     public function getId(): ?int
@@ -288,6 +292,41 @@ class Car
     {
         $this->hpi = $hpi;
 
+        return $this;
+    }
+
+    public function getFeatures(): ?array
+    {
+        return $this->features;
+    }
+
+    public function setFeatures(?array $features): static
+    {
+        $this->features = $features;
+
+        return $this;
+    }
+
+    public function addFeature(string $feature): self
+    {
+        if ($this->features === null) {
+            $this->features = [];
+        }
+
+        if (!in_array($feature, $this->features, true)) {
+            $this->features[] = $feature;
+        }
+
+        return $this;
+    }
+
+    public function removeFeature(string $feature): self
+    {
+        if ($this->features === null) {
+            return $this;
+        }
+
+        $this->features = array_filter($this->features, fn($f) => $f !== $feature);
         return $this;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Car;
 use App\Entity\CarImage;
 use App\Form\CarFormType;
+use App\Form\FeaturesFormType;
 use App\Form\ImageType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -69,6 +70,25 @@ class AdminController extends AbstractController
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
 
+        // New features form
+        $featuresForm = $this->createForm(FeaturesFormType::class, $car);
+        $featuresForm->handleRequest($request);
+
+        if ($featuresForm->isSubmitted() && $featuresForm->isValid()) {
+            $newFeature = $featuresForm->get('feature')->getData();
+
+            // Add the new feature to the car's features array
+            if ($newFeature) {
+                $car->addFeature($newFeature);
+            }
+            $entityManager->persist($car);
+            $entityManager->flush();
+
+            // Redirect to avoid form resubmission
+            return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
+        }
+
+        // Handle image form submission
         if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('image')->getData();
 
@@ -83,19 +103,14 @@ class AdminController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    // Handle file upload error
-//                    $this->addFlash('error', 'Failed to upload image.');
+                    // Handle file upload exception
                     return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
                 }
-
-                // Update the 'path' property to store the image file name
                 $image->setPath($newFilename);
                 $image->setCar($car);
-
                 $entityManager->persist($image);
                 $entityManager->flush();
 
-//                $this->addFlash('success', 'Image uploaded successfully.');
                 return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
             }
         }
@@ -103,6 +118,7 @@ class AdminController extends AbstractController
         return $this->render('admin/car.html.twig', [
             'car' => $car,
             'form' => $form->createView(),
+            'featuresForm' => $featuresForm->createView(),
             'controller_name' => 'Car Details | UK Dream Cars',
         ]);
     }
