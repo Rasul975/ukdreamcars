@@ -1,0 +1,83 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block customPageStylesheet %}
+    <style>
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+        .card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .card-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .btn {
+            margin-top: auto;
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+
+    <div class="container mt-3">
+        <!-- Filter Form -->
+        <form method="get" action="{{ path('app_admin_inventory') }}" class="d-flex justify-content-end mb-4">
+            <select name="status" class="form-select w-auto me-2">
+                <option value="all" {% if status == 'all' %}selected{% endif %}>All</option>
+                <option value="sold" {% if status == 'sold' %}selected{% endif %}>Sold</option>
+                <option value="available" {% if status == 'available' %}selected{% endif %}>Available</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-3 mb-3">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+
+        <!-- Cars Listing -->
+        <div class="row">
+            {% if pagination.items %}
+                {% for car in pagination.items %}
+                    <div class="col-3 mt-5 d-flex">
+                        <div class="card" style="width: 18rem;">
+                            {% if car.getPrimaryImage() %}
+                                <img src="{{ asset('uploads/car_images/' ~ car.getPrimaryImage().path) }}" alt="{{ car.registration }}" class="card-img-top">
+                            {% else %}
+                                <img src="{{ asset('images/coming-soon.jpg') }}" alt="" class="card-img-top">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ car.registration }}</h5>
+                                <p class="card-text">Make: {{ car.make }}</p>
+                                <p class="card-text">Model: {{ car.model }}</p>
+                                <p class="card-text">Year: {{ car.year }}</p>
+                                <a class="btn btn-primary w-100 mt-1" href="{{ path('app_admin_car', {'id': car.id}) }}">More details</a>
+                                <a class="btn btn-warning w-100 mt-1" href="{{ path('app_admin_car_edit', {'id': car.id}) }}">Edit</a>
+                                <a class="btn btn-danger w-100 mt-1" href="{{ path('app_admin_car_edit', {'id': car.id}) }}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h3>There are no cars to show</h3>
+            {% endif %}
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-3 mb-3">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,5 @@
+{% macro nav_item(route, label) %}
+    <li class="nav-item">
+        <a class="nav-link {% if app.request.get('_route') == route %}active{% endif %}" href="{{ path(route) }}">{{ label }}</a>
+    </li>
+{% endmacro %}

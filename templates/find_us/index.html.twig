@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Find Us{% endblock %}
+
+{% block metaData %}
+    <meta name="description" content="Find UK Dream Cars in Manchester. Use our interactive map to locate our dealership and get directions. We're easy to find, with excellent customer service waiting for you!">
+    <meta name="keywords" content="Find UK Dream Cars, Manchester car dealership location, get directions, UK Dream Cars map, Manchester used cars, car dealership address, directions to UK Dream Cars">
+    <meta name="author" content="UK Dream Cars">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Find Us | UK Dream Cars">
+    <meta property="og:description" content="Find our UK Dream Cars dealership in Manchester with ease using our interactive map. Get directions and visit us for excellent customer service and quality used cars.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ukdreamcars.co.uk/find-us">
+{% endblock %}
+
+
+{% block customPageStylesheet %}
+    <style>
+        #map {
+            height: 400px;  /* Adjust the height as needed */
+            width: 90%;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid d-flex flex-column justify-content-center align-items-center">
+        <h1>Find us</h1>
+        <div id="map"></div>
+        <button id="directions-button" class="btn btn-primary mt-3" onclick="getDirections()">Get Directions</button>
+    </div>
+{% endblock %}
+
+{% block pageJavascripts %}
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            const location = { lat: 53.474722, lng: -2.219030 };
+            const map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 18,
+                center: location
+            });
+            const marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+        }
+
+        function getDirections() {
+            const destination = '53.474722,-2.219030';
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+            window.open(url, '_blank');
+        }
+    </script>
+{% endblock %}

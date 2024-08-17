@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block metaData %}
+    <meta name="description" content="Explore our previously sold cars at UK Dream Cars. View detailed information and images of the vehicles we have sold, including make, model, year, and more.">
+    <meta name="keywords" content="previously sold cars, car inventory, used cars, car listings, UK Dream Cars, vehicle details, car sales">
+    <meta name="author" content="UK Dream Cars">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Previously Sold Cars | UK Dream Cars">
+    <meta property="og:description" content="Check out the list of cars we have previously sold. Browse through detailed listings with images and specifications of our sold inventory.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ukdreamcars.co.uk/previously-sold">
+{% endblock %}
+
+
+{% block body %}
+    <style>
+        .car-container {
+            margin-bottom: 2rem;
+            max-width: 80%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .car-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .car-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .car-detail {
+            width: 48%;
+            margin-bottom: 1rem;
+        }
+        .car-price {
+            color: #e74c3c;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .car-button-group {
+            margin-top: 1rem;
+        }
+        .car-button {
+            margin-right: 0.5rem;
+        }
+        .car-image-container {
+            padding: 1rem;
+            background-color: #34495e;
+            border-radius: 10px;
+        }
+        .search-container {
+            background-color: #1c1c1c;
+            color: #fff;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            max-width: 80%;
+        }
+
+        .search-container form {
+            margin-bottom: 1rem;
+        }
+
+        .search-container label {
+            color: #fff;
+        }
+        .search-container select, .search-container input {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        .search-container button {
+            border: 1px solid #d35400;
+            background-color: transparent;
+            color: #d35400;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+
+{#    <div class="search-container">#}
+{#        <form action="{{ path('app_previously_sold') }}" method="get">#}
+{#            <!-- Search form elements -->#}
+{#        </form>#}
+{#    </div>#}
+
+    {% if pagination.items %}
+        <div class="d-flex justify-content-center mt-3 mb-3">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+
+        {% for car in pagination.items %}
+            <div class="container car-container">
+                <div class="row align-items-center">
+                    <div class="col-12 col-lg-4 car-image-container">
+                        {% if car.getPrimaryImage() %}
+                            <img class="img-fluid w-100" src="{{ asset('uploads/car_images/' ~ car.getPrimaryImage().path) }}" alt="{{ car.registration }}">
+                        {% else %}
+                            <img class="img-fluid w-100" src="{{ asset('images/coming-soon.jpg') }}" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-lg-8">
+                        <h1 class="car-title">{{ car.make }} {{ car.model }}</h1>
+                        <div class="car-details">
+                            <div class="car-detail">Year: {{ car.year }}</div>
+                            <div class="car-detail">Horsepower: {{ car.horsepower }} BHP</div>
+                            <div class="car-detail">Transmission: {{ car.transmission }}</div>
+                        </div>
+                        <div class="car-button-group d-flex flex-wrap">
+                            <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="btn btn-info car-button">More Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="d-flex justify-content-center mt-3 mb-3">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% else %}
+        <div class="container car-container">
+            <h3>There are no cars to show</h3>
+        </div>
+    {% endif %}
+{% endblock %}

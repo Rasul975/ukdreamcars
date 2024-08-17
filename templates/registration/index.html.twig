@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block customPageStylesheet %}
+    <style>
+        .registration-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #fff;
+        }
+        .registration-container h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            color: #333;
+            text-align: center;
+        }
+        .registration-container .form-control {
+            border-radius: 5px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .registration-container .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(38,143,255,.25);
+        }
+        .registration-container .btn-primary {
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .registration-container .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="registration-container">
+            <h1 class="text-center">Enter your details below:</h1>
+
+            {{ form_start(registrationForm) }}
+
+            <div class="mb-3">
+                <label for="email" class="form-label">{{ form_label(registrationForm.email) }}</label>
+                {{ form_widget(registrationForm.email, {'attr': {class: 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">{{ form_label(registrationForm.password) }}</label>
+                {{ form_widget(registrationForm.password, {'attr': {class: 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                <label for="firstName" class="form-label">{{ form_label(registrationForm.firstName) }}</label>
+                {{ form_widget(registrationForm.firstName, {'attr': {class: 'form-control'}}) }}
+            </div>
+
+            <div class="mb-3">
+                <label for="lastName" class="form-label">{{ form_label(registrationForm.lastName) }}</label>
+                {{ form_widget(registrationForm.lastName, {'attr': {class: 'form-control'}}) }}
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary w-100 py-2" type="submit">Register</button>
+            </div>
+
+            {{ form_end(registrationForm) }}
+        </div>
+    </div>
+{% endblock %}

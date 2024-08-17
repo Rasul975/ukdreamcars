@@ -1,0 +1,62 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block customPageStylesheet %}
+{% endblock %}
+
+{% block pageJavascripts %}
+{% endblock %}
+
+{% block dashboard_content %}
+    <div>
+        <h1>{{ car.make }} {{ car.model }}</h1>
+        <p>Registration: {{ car.registration }}</p>
+        <p>Year: {{ car.year }}</p>
+        <p>Mileage: {{ car.mileage }}</p>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <h2>Upload Image</h2>
+            {{ form_start(form, {'attr': {'enctype': 'multipart/form-data'}}) }}
+            {{ form_widget(form.image) }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+            {{ form_end(form) }}
+
+            {% if car.sold%}
+                <a href="{{ path('app_admin_car_available', {'id': car.id}) }}" class="btn btn-success">Mark as Available</a>
+            {% else %}
+                <a href="{{ path('app_admin_car_sold', {'id': car.id}) }}" class="btn btn-success">Mark as Sold</a>
+            {% endif %}
+        </div>
+        <div class="col-4">
+            <h2>Add Features</h2>
+
+            {{ form_start(featuresForm) }}
+            {{ form_widget(featuresForm) }}
+            <button type="submit" class="btn btn-primary">Add Feature</button>
+            {{ form_end(featuresForm) }}
+        </div>
+    </div>
+
+
+    <h2>Images</h2>
+    <div class="row">
+        {% if car.carImage|length > 0 %}
+            {% for image in car.carImage %}
+                <div class="col-4 mb-3">
+                    <div class="position-relative">
+                        <a href="{{ path('app_admin_delete_image', {'carId': car.id, 'id': image.id}) }}"
+                           class="btn btn-danger btn-sm position-absolute top-0 end-0 delete-image">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                        <img src="{{ asset('uploads/car_images/' ~ image.path) }}" alt="Car Image" class="img-fluid">
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images available for this car.</p>
+        {% endif %}
+    </div>
+{% endblock %}

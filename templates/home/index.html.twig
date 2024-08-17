@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block customPageStylesheet %}
+    <style>
+        .jumbotron {
+            background: url('{{ asset('images/Audi.jpg') }}') no-repeat center center;
+            background-size: cover;
+            height: 600px;
+            position: relative;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Align items to the bottom */
+        }
+
+        .darker {
+            background-color: #f8f9fa;
+            padding: 30px;
+        }
+
+        .custom2 {
+            background-color: #fff;
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .jumbotron {
+                height: 400px;
+            }
+
+            .darker, .custom2 {
+                padding: 15px;
+            }
+
+            .jumbotron-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .jumbotron-content p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .jumbotron {
+                height: 300px;
+            }
+
+            .jumbotron-content h1 {
+                font-size: 2rem;
+            }
+
+            .jumbotron-content p {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <div class="jumbotron-content">
+            <h1 class="display-4">Welcome to UK Dream Cars</h1>
+            <p class="lead">Quality Used Cars For Sale</p>
+        </div>
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-6 col-12">
+                <a href="{{ path('app_inventory') }}" class="card-link">
+                    <div class="card card-custom">
+                        <img src="{{ asset('images/BMW_1.jpg') }}" alt="Showroom">
+                        <div class="card-body">
+                            <h5>Showroom</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <a href="{{ path('app_previously_sold') }}" class="card-link">
+                    <div class="card card-custom">
+                        <img src="{{ asset('images/Audi_RS7.jpg') }}" alt="Previously Sold">
+                        <div class="card-body">
+                            <h5>Previously Sold</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6 col-12">
+                <a href="{{ path('app_part_exchange') }}" class="card-link">
+                    <div class="card card-custom">
+                        <img src="{{ asset('images/automotive.jpg') }}" alt="Part Exchange">
+                        <div class="card-body">
+                            <h5>Part Exchange</h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid container-fluid-custom darker">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-12">
+                <h2>Welcome to UK Dream Cars</h2>
+                <h5>Quality Used Cars for Sale in Manchester, Greater Manchester</h5>
+                <p>At UK Dream Cars, we specialize in offering a wide range of quality used cars in Manchester and Greater Manchester. Whether you're looking for a luxury sedan, a sporty convertible, or a reliable family SUV, we have a vehicle to suit your needs.</p>
+                <p>Our stock list is updated regularly to ensure we offer the latest models and best deals available. Even if you don't see what you're looking for on our website, it's worth giving us a call as we may have new arrivals or upcoming vehicles that match your preferences.</p>
+                <p>We understand that buying a car can be a significant decision. Rest assured, we are well-established within the automotive industry and have built a strong reputation for providing excellent advice and customer service. Our friendly and knowledgeable staff are here to guide you through every step of your car-buying journey.</p>
+                <p>At UK Dream Cars, we take pride in delivering a friendly and professional service to all our customers. From assisting with your initial enquiry to handing over the keys, we ensure that each car is meticulously prepared to the highest standards.</p>
+                <p>Our commitment to customer satisfaction is at the core of our business. We believe in treating every customer fairly and strive to offer a personalized and pleasant experience.</p>
+
+                <a href="{{ path('app_inventory') }}" class="btn btn-info">Browse Showroom</a>
+                <a href="{{ path('app_find_us') }}" class="btn btn-secondary">Find us</a>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-12">
+                <div class="card card-custom">
+                    <img src="{{ asset('images/mercedes.jpg') }}" alt="Previously Sold">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid py-5">
+        <div class="row">
+            {% if cars %}
+                {% for car in cars %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="card-link">
+                            <div class="card card-custom">
+                                <div id="carousel-{{ car.id }}" class="carousel slide" data-bs-ride="carousel">
+                                    <div class="carousel-inner">
+                                        {% for image in car.carImage %}
+                                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                                <img src="{{ asset('uploads/car_images/' ~ image.path) }}" class="d-block w-100" alt="Car Image">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ car.id }}" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ car.id }}" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                                <div class="card-body-feature text-center">
+                                    <h5>{{ car.make }} {{ car.model }} {{ car.year }}</h5>
+                                    <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="btn btn-success">More Details</a>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <h1>No cars available</h1>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

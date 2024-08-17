@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item {% if app.request.attributes.get('_route') == 'app_admin' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('app_admin') }}">
+                                <span data-feather="home"></span>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item {% if app.request.attributes.get('_route') == 'app_admin_inventory' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('app_admin_inventory') }}">
+                                <span data-feather="file"></span>
+                                Inventory
+                            </a>
+                        </li>
+                        <li class="nav-item {% if app.request.attributes.get('_route') == 'app_admin_car_new' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('app_admin_car_new') }}">
+                                <span data-feather="file"></span>
+                                Add Car
+                            </a>
+                        </li>
+
+                        <li class="nav-item {% if app.request.attributes.get('_route') == 'app_admin_users' %}active{% endif %}">
+                            <a class="nav-link" href="{{ path('app_admin_users') }}">
+                                <span data-feather="file"></span>
+                                Manage Users
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                {% block dashboard_content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+{% endblock %}

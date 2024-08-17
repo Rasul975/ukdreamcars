@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Car{% endblock %}
+
+{% block body %}
+
+    <div class="container mt-3">
+        <h1>Edit Car</h1>
+
+        {{ form_start(form) }}
+
+        <div class="form-group">
+            {{ form_label(form.registration) }}
+            {{ form_widget(form.registration, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.registration) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.model) }}
+            {{ form_widget(form.model, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.model) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.mileage) }}
+            {{ form_widget(form.mileage, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.mileage) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.transmission) }}
+            {{ form_widget(form.transmission, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.transmission) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.hpi) }}
+            {{ form_widget(form.hpi, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.hpi) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.price) }}
+            {{ form_widget(form.price, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.price) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.doors) }}
+            {{ form_widget(form.doors, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.doors) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.horsepower) }}
+            {{ form_widget(form.horsepower, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.horsepower) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save changes</button>
+        {{ form_end(form) }}
+
+        <a href="{{ path('app_admin') }}" class="btn btn-secondary mt-3">Back to car list</a>
+
+    </div>
+{% endblock %}

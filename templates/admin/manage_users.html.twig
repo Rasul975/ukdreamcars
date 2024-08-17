@@ -1,0 +1,130 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}Manage Users{% endblock %}
+
+{% block customPageStylesheet %}
+    <style>
+        /* Unique wrapper for this page */
+        .manage-users-page {
+            max-width: 90%;
+            margin-top: 3rem !important;
+        }
+
+        /* Card styling */
+        .manage-users-page .card {
+            background-color: #2a2a3b;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .manage-users-page .card-header {
+            background: linear-gradient(90deg, #9c27b0, #651fff);
+            border-bottom: 2px solid #2a2a3b;
+            padding: 1rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .manage-users-page .card-footer {
+            background-color: #1e1e2d;
+            border-top: 2px solid #2a2a3b;
+            border-radius: 0 0 8px 8px;
+        }
+
+        /* Table styling */
+        .manage-users-page .table-dark {
+            background-color: #1e1e2d;
+            color: #fff;
+        }
+
+        .manage-users-page .table-dark th,
+        .manage-users-page .table-dark td {
+            border-color: #2a2a3b;
+        }
+
+        .manage-users-page .table-dark th {
+            font-weight: 600;
+        }
+
+        /* Button hover effect */
+        .manage-users-page .btn:hover {
+            opacity: 0.85;
+        }
+
+        /* Dropdown styling */
+        .manage-users-page .dropdown-menu {
+            background-color: #ffffff; /* Set background color to white */
+            color: #000000; /* Optional: Set text color to black for better contrast */
+        }
+
+        .manage-users-page .dropdown-item {
+            color: #000000; /* Set text color for dropdown items */
+        }
+
+        .manage-users-page .dropdown-item:hover {
+            background-color: #f8f9fa; /* Light grey background on hover for better UX */
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container manage-users-page">
+        <div class="card">
+            <div class="card-header bg-gradient text-white d-flex justify-content-between align-items-center">
+                <h3 class="mb-0">Manage Users</h3>
+                <a href="#" class="btn btn-success">ADD NEW</a>
+            </div>
+            <div class="card-body p-0">
+                {% if users is not empty %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover mb-5">
+                            <thead>
+                            <tr>
+                                <th scope="col">User ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Roles</th>
+                                <th scope="col" class="text-center">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td>{{ user.id }}</td>
+                                    <td>{{ user.firstName }}</td>
+                                    <td>{{ user.lastName }}</td>
+                                    <td>{{ user.email }}</td>
+                                    <td>
+                                        {% if user.roles is not empty %}
+                                            {% set currentRole = user.roles[0] %}
+                                        {% else %}
+                                            {% set currentRole = 'ROLE_USER' %}
+                                        {% endif %}
+                                        <div class="dropdown">
+                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton{{ user.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                {{ currentRole|replace({'ROLE_': ''})|capitalize }}
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ user.id }}">
+                                                <li><a class="dropdown-item" href="{{ path('app_admin_users_roles', {'id': user.id, 'role': 'ROLE_USER'}) }}">Regular User</a></li>
+                                                <li><a class="dropdown-item" href="{{ path('app_admin_users_roles', {'id': user.id, 'role': 'ROLE_ADMIN'}) }}">Admin</a></li>
+                                                <li><a class="dropdown-item" href="{{ path('app_admin_users_roles', {'id': user.id, 'role': 'ROLE_SALES'}) }}">Sales</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ path('app_admin_users_delete', {'id': user.id}) }}" class="btn btn-danger">DELETE</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mt-4">
+                        No users found.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

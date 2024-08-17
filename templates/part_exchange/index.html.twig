@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Part Exchange{% endblock %}
+
+{% block metaData %}
+    <meta name="description" content="Looking to part exchange your vehicle? At UK Dream Cars, we make the process easy and hassle-free. Fill out our form with your details and vehicle information to get a quick appraisal and offer.">
+    <meta name="keywords" content="part exchange, vehicle appraisal, car trade-in, UK Dream Cars, car dealership Manchester, car valuation, trade-in offer, vehicle details form">
+    <meta name="author" content="UK Dream Cars">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Part Exchange | UK Dream Cars">
+    <meta property="og:description" content="Interested in part exchanging your car? Complete our easy-to-use form with your personal and vehicle details, and receive a quick offer from UK Dream Cars.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ukdreamcars.co.uk/part-exchange">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container container-fluid-custom custom2 my-5">
+        <h1 class="mb-4">Part Exchange</h1>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Your Personal Details</h2>
+                <div class="mb-3">
+                    {{ form_row(form.name) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.email) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.phone) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.interestedIn) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.message) }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h2>Your Vehicle Details</h2>
+                <div class="mb-3">
+                    {{ form_row(form.makeModel) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.registration) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.mileage) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.transmission) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.fuelType) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.exteriorColour) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.interiorColour) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.interiorFinish) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.fullServiceHistory) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.lastServiced) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.previousOwners) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.condition) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

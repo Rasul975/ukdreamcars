@@ -1,0 +1,12 @@
+{# templates/error/error.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Error {{ code }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Error {{ code }}</h1>
+        <p>{{ message }}</p>
+        <a href="{{ path('app_home') }}" class="btn btn-primary">Go to Homepage</a>
+    </div>
+{% endblock %}

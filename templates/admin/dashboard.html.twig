@@ -1,0 +1,22 @@
+{% extends 'admin/index.html.twig' %}
+
+{% block title %}{{ controller_name }}{% endblock %}
+
+{% block customPageStylesheet %}
+
+{% endblock %}
+
+{% block dashboard_content %}
+
+    <div class="mt-3">
+        <div class="d-flex">
+            <h3 class="mb-0 text-secondary">Dashboard</h3>
+            <h3 class="ms-3">Welcome: {{ currentUser.firstName ~ ' ' ~ currentUser.lastName }}</h3>
+        </div>
+
+        <h2>User count: {{ userCount }}</h2>
+        <h2>Car count {{ carCount }}</h2>
+
+    </div>
+
+{% endblock %}

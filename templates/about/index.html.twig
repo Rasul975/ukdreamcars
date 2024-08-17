@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About Us | UK Dream Cars{% endblock %}
+
+{% block metaData %}
+    <meta name="description" content="Discover UK Dream Cars, your trusted source for quality used cars in Manchester and Greater Manchester. Explore our inventory of luxury, sporty, and family vehicles with exceptional customer service.">
+    <meta name="keywords" content="UK Dream Cars, used cars Manchester, luxury cars, family SUVs, quality used cars, Manchester car dealership, Greater Manchester cars, car sales, used luxury vehicles, car buying, customer service, car dealership">
+    <meta name="author" content="UK Dream Cars">
+    <meta property="og:title" content="About Us | UK Dream Cars">
+    <meta property="og:description" content="Learn more about UK Dream Cars, offering a wide range of quality used cars in Manchester and Greater Manchester with excellent customer service.">
+    <meta property="og:image" content="{{ asset('images/mercedes-amg-gt.jpg') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.ukdreamcars.co.uk/about">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Us | UK Dream Cars">
+    <meta name="twitter:description" content="Explore UK Dream Cars in Manchester for quality used cars and exceptional customer service.">
+    <meta name="twitter:image" content="{{ asset('images/mercedes-amg-gt.jpg') }}">
+{% endblock %}
+
+{% block customPageStylesheet %}
+    <style>
+        .jumbotron {
+            background: url('{{ asset('images/mercedes-amg-gt.jpg') }}') no-repeat center center;
+            background-size: cover;
+            height: 400px;
+            position: relative;
+            color: white;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* Align items to the bottom */
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <div class="jumbotron-content">
+            <h1 class="display-4">About Us</h1>
+            <p class="lead">Learn More About UK Dream Cars</p>
+        </div>
+    </div>
+
+    <div class="container-fluid container-fluid-custom custom3">
+        <div class="row g-3">
+            <div class="col-lg-8 col-md-8 col-12">
+                <h2>Welcome to UK Dream Cars</h2>
+                <h5>Quality Used Cars for Sale in Manchester, Greater Manchester</h5>
+                <p>At UK Dream Cars, we specialize in offering a wide range of quality used cars in Manchester and Greater Manchester. Whether you're looking for a luxury sedan, a sporty convertible, or a reliable family SUV, we have a vehicle to suit your needs.</p>
+                <p>Our stock list is updated regularly to ensure we offer the latest models and best deals available. Even if you don't see what you're looking for on our website, it's worth giving us a call as we may have new arrivals or upcoming vehicles that match your preferences.</p>
+                <p>We understand that buying a car can be a significant decision. Rest assured, we are well-established within the automotive industry and have built a strong reputation for providing excellent advice and customer service. Our friendly and knowledgeable staff are here to guide you through every step of your car-buying journey.</p>
+                <p>At UK Dream Cars, we take pride in delivering a friendly and professional service to all our customers. From assisting with your initial enquiry to handing over the keys, we ensure that each car is meticulously prepared to the highest standards.</p>
+                <p>Our commitment to customer satisfaction is at the core of our business. We believe in treating every customer fairly and strive to offer a personalized and pleasant experience.</p>
+
+                <a href="{{ path('app_inventory') }}" class="btn btn-info">Browse Showroom</a>
+                <a href="{{ path('app_inventory') }}" class="btn btn-secondary">Find us</a>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-12">
+                <div class="card card-custom">
+                    <img src="{{ asset('images/Audi_RS7.jpg') }}" alt="Previously Sold">
+                    <div class="card-body">
+                        <h5>Previously Sold</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid container-fluid-custom custom2">
+        <h2 class="pb-2 border-bottom">Visit UK Dream Cars Today</h2>
+
+        <div class="row g-3">
+            <div class="col-lg-4 col-md-4 col-12">
+                <div class="card card-custom">
+                    <img src="{{ asset('images/Audi_RS7.jpg') }}" alt="Previously Sold">
+                    <div class="card-body">
+                        <h5>Previously Sold</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-12 d-flex justify-content-center align-items-center">
+                <div class="container">
+                    <p class="text-center">Customer Relations: At UK Dream Cars our highest priority is you, The Satisfied Customer. You are important to us, and you can expect us to go the extra mile. Superior customer service is the hallmark of Bradford Road Quality Used Cars.</p>
+
+                    <ul>
+                        <li>Robust selection of popular vehicles.</li>
+                        <li>Part-Exchange welcome.</li>
+                        <li>Warranty available</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

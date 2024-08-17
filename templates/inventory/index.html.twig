@@ -1,0 +1,212 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{controller_name}}{% endblock %}
+
+{% block body %}
+
+    <style>
+        .car-container {
+            margin-bottom: 2rem;
+            max-width: 80%;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        .car-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .car-details {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .car-detail {
+            width: 48%;
+            margin-bottom: 1rem;
+        }
+        .car-price {
+            color: #2db209;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .car-button-group {
+            margin-top: 1rem;
+        }
+        .car-button {
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .car-image-container {
+            padding: 1rem;
+            background-color: #34495e;
+            border-radius: 10px;
+        }
+
+        .search-container form {
+            margin-bottom: 1rem;
+        }
+
+        .search-container label {
+            color: #fff;
+        }
+        .search-container select, .search-container input {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+        }
+        .search-container button {
+            border: 1px solid #d35400;
+            background-color: transparent;
+            color: #d35400;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .search-form {
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .car-container {
+                max-width: 100%;
+            }
+            .car-detail {
+                width: 100%;
+            }
+            .car-button-group {
+                flex-wrap: wrap;
+            }
+            .car-button {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
+    </style>
+
+    <!-- Search Form -->
+    <div class="search-form">
+        <div class="container car-container mt-4">
+            <form method="get" action="{{ path('app_inventory') }}" class="row g-3">
+                <div class="col-md-3 col-6">
+                    <label for="make" class="form-label">Make</label>
+                    <select id="make" name="make" class="form-control" onchange="this.form.submit()">
+                        <option value="">Show all</option>
+                        {% for make in distinctMakes %}
+                            <option value="{{ make.make }}" {% if selectedMake == make.make %}selected{% endif %}>
+                                {{ make.make }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 col-6">
+                    <label for="model" class="form-label">Model</label>
+                    <select id="model" name="model" class="form-control">
+                        <option value="">Any Model</option>
+                        {% for model in distinctModels %}
+                            <option value="{{ model.model }}">
+                                {{ model.model }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 col-6">
+                    <label for="price" class="form-label">Price</label>
+                    <select id="price" name="price" class="form-control">
+                        <option value="">Any Price</option>
+                        <option value="5000">Up to £5,000</option>
+                        <option value="10000">Up to £10,000</option>
+                        <option value="15000">Up to £15,000</option>
+                        <option value="20000">Up to £20,000</option>
+                        <option value="25000">Up to £25,000</option>
+                        <option value="30000">Up to £30,000</option>
+                        <option value="35000">Up to £35,000</option>
+                        <option value="40000">Up to £40,000</option>
+                        <option value="45000">Up to £45,000</option>
+                        <option value="50000">Up to £50,000</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-6">
+                    <label for="sortField" class="form-label">Sort By</label>
+                    <select id="sortField" name="sortField" class="form-control">
+                        <option value="">Select Field</option>
+                        <option value="year" {% if sortField == 'year' %}selected{% endif %}>Year</option>
+                        <option value="price" {% if sortField == 'price' %}selected{% endif %}>Price</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-6">
+                    <label for="sortDirection" class="form-label">Order</label>
+                    <select id="sortDirection" name="sortDirection" class="form-control">
+                        <option value="ASC" {% if sortDirection == 'ASC' %}selected{% endif %}>Ascending</option>
+                        <option value="DESC" {% if sortDirection == 'DESC' %}selected{% endif %}>Descending</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-6 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success me-2 w-100">Search</button>
+                    <button type="submit" class="btn btn-danger w-100" onclick="resetForm()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Car Listings -->
+    <div class="d-flex flex-column align-items-center">
+        {% if pagination.items %}
+            {% for car in pagination.items %}
+                <div class="container car-container">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-lg-4 car-image-container">
+                            {% if car.getPrimaryImage() %}
+                                <img class="img-fluid w-100" src="{{ asset('uploads/car_images/' ~ car.getPrimaryImage().path) }}" alt="{{ car.registration }}">
+                            {% else %}
+                                <img class="img-fluid w-100" src="{{ asset('images/coming-soon.jpg') }}" alt="">
+                            {% endif %}
+                        </div>
+                        <div class="col-12 col-lg-8">
+                            <h1 class="car-title">{{ car.make }} {{ car.model }}</h1>
+                            <div class="car-details">
+                                <div class="car-detail">Year: {{ car.year }}</div>
+                                <div class="car-detail">Horsepower: {{ car.horsepower }} BHP</div>
+                                <div class="car-detail">Transmission: {{ car.transmission }}</div>
+                                <div class="car-detail car-price">Price: £{{ car.price }}</div>
+                            </div>
+                            <div class="car-button-group d-flex flex-wrap">
+                                <a href="{{ path('app_contact_us') }}" class="btn btn-success car-button">Make Enquiry</a>
+                                <a href="{{ path('app_part_exchange') }}" class="btn btn-primary car-button">Part Exchange your Car</a>
+                                <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="btn btn-info car-button">More Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="container car-container">
+                <h3>There are no cars to show</h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-center mt-4">
+        {{ knp_pagination_render(pagination) }}
+    </div>
+
+    <script>
+        function resetForm() {
+            document.getElementById('make').value = '';
+            document.getElementById('model').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('sortField').value = '';
+            document.getElementById('sortDirection').value = 'ASC';
+        }
+    </script>
+
+{% endblock %}
+
+
