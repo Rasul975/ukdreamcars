@@ -30,7 +30,7 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'cars' => $carList,
-            'controller_name' => 'UK Dream Cars',
+            'controller_name' => 'UK Dream Cars | Premium Used Cars for Sale in Manchester',
         ]);
     }
 }
