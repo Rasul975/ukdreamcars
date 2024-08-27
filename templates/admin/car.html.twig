@@ -51,6 +51,25 @@
                            class="btn btn-danger btn-sm position-absolute top-0 end-0 delete-image">
                             <i class="fas fa-trash-alt"></i>
                         </a>
+                        <img src="{{ image.path }}" alt="Car Image" class="img-fluid">
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No images available for this car.</p>
+        {% endif %}
+    </div>
+
+    <h2>Images</h2>
+    <div class="row">
+        {% if car.carImage|length > 0 %}
+            {% for image in car.carImage %}
+                <div class="col-4 mb-3">
+                    <div class="position-relative">
+                        <a href="{{ path('app_admin_delete_image', {'carId': car.id, 'id': image.id}) }}"
+                           class="btn btn-danger btn-sm position-absolute top-0 end-0 delete-image">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
                         <img src="{{ asset('uploads/car_images/' ~ image.path) }}" alt="Car Image" class="img-fluid">
                     </div>
                 </div>

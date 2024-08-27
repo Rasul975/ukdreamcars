@@ -15,14 +15,7 @@
       <jdbc-url>jdbc:mysql://localhost:3306/ukdreamcars</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="MariaDB" uuid="e8fcc248-8bc8-49f4-988c-b16ded5108fd">
-      <driver-ref>mariadb</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mariadb://f80b6byii2vwv8cx.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/zqe2wyeewq8w53r6</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="Hostinger" uuid="e0c9cfef-d669-4b5d-9615-d3687721f1a8">
+    <data-source source="LOCAL" name="UK Dream Cars Hostinger" uuid="c04b9266-84a4-49ff-8874-fec1bd2e8c15">
       <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>

@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Form\CarFormType;
 use App\Form\FeaturesFormType;
 use App\Form\ImageType;
+use Aws\S3\Exception\S3Exception;
+use Aws\S3\S3Client;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,7 +19,6 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -27,11 +28,85 @@ class AdminController extends AbstractController
 {
 
     private $security;
+    private $s3Client;
+    private $s3BucketName;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, S3Client $s3Client, string $s3BucketName)
     {
         $this->security = $security;
+        $this->s3Client = $s3Client;
+        $this->s3BucketName = $s3BucketName;
     }
+
+    #[Route('/admin/car/{id}', name: 'app_admin_car', requirements: ['id' => '\d+'])]
+    public function car(ManagerRegistry $doctrine,int $id,Request $request,EntityManagerInterface $entityManager,SluggerInterface $slugger): Response {
+        // Fetch the car from the database
+        $car = $doctrine->getRepository(Car::class)->find($id);
+        if (!$car) {
+            throw $this->createNotFoundException('The car does not exist');
+        }
+
+        // Handle the features form
+        $featuresForm = $this->createForm(FeaturesFormType::class, $car);
+        $featuresForm->handleRequest($request);
+
+        if ($featuresForm->isSubmitted() && $featuresForm->isValid()) {
+            $newFeature = $featuresForm->get('feature')->getData();
+            if ($newFeature) {
+                $car->addFeature($newFeature);
+            }
+            $entityManager->persist($car);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
+        }
+
+        $image = new CarImage();
+        $form = $this->createForm(ImageType::class, $image);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+
+                try {
+                    // Upload to S3
+                    $result = $this->s3Client->putObject([
+                        'Bucket' => $this->s3BucketName,
+                        'Key'    => 'images/' . $newFilename,
+                        'SourceFile' => $imageFile->getPathname(),
+                    ]);
+
+                    // Set image URL and associate with the car
+                    $image->setPath($result['ObjectURL']);
+                    $image->setCar($car);
+
+                    // Persist the image entity to the database
+                    $entityManager->persist($image);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
+                } catch (S3Exception $e) {
+                    $this->addFlash('error', 'S3 upload error: ' . $e->getMessage());
+                    return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
+                }
+            } else {
+                $this->addFlash('error', 'No image file uploaded.');
+            }
+        }
+
+        return $this->render('admin/car.html.twig', [
+            'car' => $car,
+            'form' => $form->createView(),
+            'featuresForm' => $featuresForm->createView(),
+            'controller_name' => 'Car Details | UK Dream Cars',
+        ]);
+    }
+
+
     #[Route('/admin', name: 'app_admin')]
     public function index(ManagerRegistry $doctrine, Request $request): Response
     {
@@ -49,72 +124,6 @@ class AdminController extends AbstractController
         ]);
     }
 
-
-    #[Route('/admin/car/{id}', name: 'app_admin_car', requirements: ['id' => '\d+'])]
-    public function car(ManagerRegistry $doctrine, int $id, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
-    {
-        $car = $doctrine->getRepository(Car::class)->find($id);
-
-        if (!$car) {
-            throw $this->createNotFoundException('The car does not exist');
-        }
-
-        $image = new CarImage();
-        $form = $this->createForm(ImageType::class, $image);
-        $form->handleRequest($request);
-
-        // New features form
-        $featuresForm = $this->createForm(FeaturesFormType::class, $car);
-        $featuresForm->handleRequest($request);
-
-        if ($featuresForm->isSubmitted() && $featuresForm->isValid()) {
-            $newFeature = $featuresForm->get('feature')->getData();
-
-            // Add the new feature to the car's features array
-            if ($newFeature) {
-                $car->addFeature($newFeature);
-            }
-            $entityManager->persist($car);
-            $entityManager->flush();
-
-            // Redirect to avoid form resubmission
-            return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
-        }
-
-        // Handle image form submission
-        if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $form->get('image')->getData();
-
-            if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
-
-                try {
-                    $imageFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // Handle file upload exception
-                    return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
-                }
-                $image->setPath($newFilename);
-                $image->setCar($car);
-                $entityManager->persist($image);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
-            }
-        }
-
-        return $this->render('admin/car.html.twig', [
-            'car' => $car,
-            'form' => $form->createView(),
-            'featuresForm' => $featuresForm->createView(),
-            'controller_name' => 'Car Details | UK Dream Cars',
-        ]);
-    }
 
     #[Route('/admin/car/new', name: 'app_admin_car_new')]
     public function newCar(Request $request, EntityManagerInterface $entityManager): Response
@@ -222,31 +231,42 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/car/{carId}/image/{id}', name: 'app_admin_delete_image')]
-    public function deleteImage(ManagerRegistry $doctrine, int $carId, int $id, Filesystem $filesystem): Response
+    public function deleteImage(int $id, ManagerRegistry $doctrine, EntityManagerInterface $entityManager): Response
     {
-        $entityManager = $doctrine->getManager();
-        $image = $doctrine->getRepository(CarImage::class)->findOneBy(['id' => $id]);
+        // Find the image entity
+        $image = $doctrine->getRepository(CarImage::class)->find($id);
 
         if (!$image) {
-            throw $this->createNotFoundException('Image not found');
+            $this->addFlash('error', 'Image not found.');
+            return $this->redirectToRoute('app_admin');
         }
 
-        // Get the path to the image file
-        $imagePath = $this->getParameter('images_directory') . '/' . $image->getPath();
+        // Extract the key from the image URL
+        $imageUrl = $image->getPath();
+        $key = parse_url($imageUrl, PHP_URL_PATH);
 
-        // Remove the image from the filesystem
-        if ($filesystem->exists($imagePath)) {
-            $filesystem->remove($imagePath);
+        // The key should include the leading slash
+        if (strpos($key, '/') === 0) {
+            $key = ltrim($key, '/');
         }
 
-        // Remove the entity from the database
-        $entityManager->remove($image);
-        $entityManager->flush();
+        try {
+            // Delete from S3
+            $this->s3Client->deleteObject([
+                'Bucket' => $this->s3BucketName,
+                'Key'    => $key
+            ]);
 
-        $this->addFlash('success', 'Image deleted successfully.');
+            // Remove from the database
+            $entityManager->remove($image);
+            $entityManager->flush();
 
-        // Redirect to the car details page
-        return $this->redirectToRoute('app_admin_car', ['id' => $carId]);
+            $this->addFlash('success', 'Image deleted successfully.');
+        } catch (\Exception $e) {
+            $this->addFlash('error', 'Error deleting image: ' . $e->getMessage());
+        }
+
+        return $this->redirectToRoute('app_admin_car', ['id' => $image->getCar()->getId()]);
     }
 
 
