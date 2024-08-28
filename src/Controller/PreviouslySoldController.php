@@ -17,14 +17,16 @@ class PreviouslySoldController extends AbstractController
     {
         // Fetch the query for sold cars
         $queryBuilder = $doctrine->getRepository(Car::class)->createQueryBuilder('c')
-            ->where('c.isSold = true');
+            ->where('c.isSold = true')
+            ->orderBy('c.dateSold', 'DESC');
 
-        // Paginate the results
+// Paginate the results
         $pagination = $paginator->paginate(
             $queryBuilder, // Query to paginate
             $request->query->getInt('page', 1), // Current page number, 1 if not specified
             10 // Limit per page
         );
+
 
         return $this->render('previously_sold/index.html.twig', [
             'pagination' => $pagination,

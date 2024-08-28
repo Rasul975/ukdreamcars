@@ -53,8 +53,8 @@ class InventoryController extends AbstractController
         $make = $request->query->get('make', '');
         $model = $request->query->get('model', '');
         $price = $request->query->get('price', '');
-        $sortField = $request->query->get('sortField', '');
-        $sortDirection = $request->query->get('sortDirection', 'ASC');
+        $sortField = $request->query->get('sortField', 'DateAdded');
+        $sortDirection = $request->query->get('sortDirection', 'DESC');
 
         if (!empty($make)) {
             $queryBuilder->andWhere('c.make = :make')
