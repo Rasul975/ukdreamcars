@@ -16,7 +16,7 @@ use Mailtrap\EmailHeader\CategoryHeader;
 
 class PartExchangeController extends AbstractController
 {
-    #[Route('/part/exchange', name: 'app_part_exchange')]
+    #[Route('/part-exchange', name: 'app_part_exchange')]
     public function index(Request $request): Response
     {
         $form = $this->createForm(PartExchangeFormType::class);

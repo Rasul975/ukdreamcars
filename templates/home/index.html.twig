@@ -131,7 +131,7 @@
             {% if cars %}
                 {% for car in cars %}
                     <div class="col-lg-4 col-md-6 col-12">
-                        <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="card-link">
+                        <a href="{{ path('app_inventory_car', {'reg': car.registration}) }}" class="card-link">
                             <div class="card card-custom">
                                 <div id="carousel-{{ car.id }}" class="carousel slide" data-bs-ride="carousel">
                                     <div class="carousel-inner">
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="card-body-feature text-center">
                                     <h5>{{ car.make }} {{ car.model }} {{ car.year }}</h5>
-                                    <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="btn btn-success">More Details</a>
+                                    <a href="{{ path('app_inventory_car', {'reg': car.registration}) }}" class="btn btn-success">More Details</a>
                                 </div>
                             </div>
                         </a>

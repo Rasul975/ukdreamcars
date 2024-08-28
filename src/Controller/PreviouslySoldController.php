@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PreviouslySoldController extends AbstractController
 {
-    #[Route('/previously/sold', name: 'app_previously_sold')]
+    #[Route('/previously-sold', name: 'app_previously_sold')]
     public function index(ManagerRegistry $doctrine, PaginatorInterface $paginator, Request $request): Response
     {
         // Fetch the query for sold cars

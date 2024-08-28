@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MyProfileController extends AbstractController
 {
-    #[Route('/my/profile', name: 'app_my_profile')]
+    #[Route('/my-profile', name: 'app_my_profile')]
     public function index(): Response
     {
         return $this->render('my_profile/index.html.twig', [

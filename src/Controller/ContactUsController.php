@@ -53,7 +53,7 @@ class ContactUsController extends AbstractController
 //        ]);
 //    }
 
-    #[Route('/contact/us', name: 'app_contact_us')]
+    #[Route('/contact-us', name: 'app_contact_us')]
     public function index(Request $request): Response
     {
         $form = $this->createForm(ContactFormType::class);

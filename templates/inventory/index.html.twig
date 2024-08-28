@@ -179,7 +179,7 @@
                             <div class="car-button-group d-flex flex-wrap">
                                 <a href="{{ path('app_contact_us') }}" class="btn btn-success car-button">Make Enquiry</a>
                                 <a href="{{ path('app_part_exchange') }}" class="btn btn-primary car-button">Part Exchange your Car</a>
-                                <a href="{{ path('app_inventory_car', {'id': car.id}) }}" class="btn btn-info car-button">More Details</a>
+                                <a href="{{ path('app_inventory_car', {'reg': car.registration}) }}" class="btn btn-info car-button">More Details</a>
                             </div>
                         </div>
                     </div>

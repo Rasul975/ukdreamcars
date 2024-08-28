@@ -92,19 +92,20 @@ class InventoryController extends AbstractController
         ]);
     }
 
-    #[Route('/inventory/car/{id}', name: 'app_inventory_car', requirements: ['id' => '\d+'])]
-    public function inventory(ManagerRegistry $doctrine, int $id): Response
+    #[Route('/inventory/car/{reg}', name: 'app_inventory_car')]
+    public function inventory(ManagerRegistry $doctrine, $reg): Response
     {
-        $car = $doctrine->getRepository(Car::class)->find($id);
+        // Find car by registration number
+        $car = $doctrine->getRepository(Car::class)->findOneBy(['registration' => $reg]);
 
         if (!$car) {
             return $this->redirectToRoute('app_inventory');
         }
-
 
         return $this->render('inventory/car_details.html.twig', [
             'car' => $car,
             'controller_name' => 'Car Details | UK Dream Cars',
         ]);
     }
+
 }
