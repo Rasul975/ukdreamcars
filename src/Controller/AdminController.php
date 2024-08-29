@@ -208,13 +208,17 @@ class AdminController extends AbstractController
         $em = $doctrine->getManager();
         $car = $em->getRepository(Car::class)->find($id);
 
-        if($car){
+        if ($car) {
             $car->setIsSold(true);
+            $car->setDateSold(new \DateTime()); // Set the current date and time as the sold date
+
             $em->persist($car);
             $em->flush();
         }
+
         return $this->redirectToRoute('app_admin_car', ['id' => $id]);
     }
+
 
     #[Route('/admin/car/{id}/available', name: 'app_admin_car_available')]
     public function markAsAvailable(ManagerRegistry $doctrine, $id): Response
