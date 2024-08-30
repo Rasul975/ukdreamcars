@@ -18,7 +18,6 @@ use GuzzleHttp\Client;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -39,7 +38,8 @@ class AdminController extends AbstractController
     }
 
     #[Route('/admin/car/{id}', name: 'app_admin_car', requirements: ['id' => '\d+'])]
-    public function car(ManagerRegistry $doctrine,int $id,Request $request,EntityManagerInterface $entityManager,SluggerInterface $slugger): Response {
+    public function car(ManagerRegistry $doctrine, int $id, Request $request, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
+    {
         // Fetch the car from the database
         $car = $doctrine->getRepository(Car::class)->find($id);
         if (!$car) {
@@ -61,40 +61,45 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
         }
 
-        $image = new CarImage();
-        $form = $this->createForm(ImageType::class, $image);
+        // Create a new form for images
+        $form = $this->createForm(ImageType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageFile = $form->get('image')->getData();
-            if ($imageFile) {
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
+            $imageFiles = $form->get('images')->getData();
 
-                try {
-                    // Upload to S3
-                    $result = $this->s3Client->putObject([
-                        'Bucket' => $this->s3BucketName,
-                        'Key'    => 'images/' . $newFilename,
-                        'SourceFile' => $imageFile->getPathname(),
-                    ]);
+            if ($imageFiles) {
+                foreach ($imageFiles as $imageFile) {
+                    $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $imageFile->guessExtension();
 
-                    // Set image URL and associate with the car
-                    $image->setPath($result['ObjectURL']);
-                    $image->setCar($car);
+                    try {
+                        // Upload each image to S3
+                        $result = $this->s3Client->putObject([
+                            'Bucket' => $this->s3BucketName,
+                            'Key'    => 'images/' . $newFilename,
+                            'SourceFile' => $imageFile->getPathname(),
+                        ]);
 
-                    // Persist the image entity to the database
-                    $entityManager->persist($image);
-                    $entityManager->flush();
+                        // Create a new CarImage entity for each image
+                        $image = new CarImage();
+                        $image->setPath($result['ObjectURL']);
+                        $image->setCar($car);
 
-                    return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
-                } catch (S3Exception $e) {
-                    $this->addFlash('error', 'S3 upload error: ' . $e->getMessage());
-                    return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
+                        // Persist each image entity to the database
+                        $entityManager->persist($image);
+                    } catch (S3Exception $e) {
+                        $this->addFlash('error', 'S3 upload error: ' . $e->getMessage());
+                        return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
+                    }
                 }
+
+                // Flush all images at once
+                $entityManager->flush();
+                return $this->redirectToRoute('app_admin_car', ['id' => $car->getId()]);
             } else {
-                $this->addFlash('error', 'No image file uploaded.');
+                $this->addFlash('error', 'No image files uploaded.');
             }
         }
 
@@ -105,6 +110,8 @@ class AdminController extends AbstractController
             'controller_name' => 'Car Details | UK Dream Cars',
         ]);
     }
+
+
 
 
     #[Route('/admin', name: 'app_admin')]

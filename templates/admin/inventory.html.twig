@@ -53,7 +53,7 @@
                     <div class="col-3 mt-5 d-flex">
                         <div class="card" style="width: 18rem;">
                             {% if car.getPrimaryImage() %}
-                                <img src="{{ asset('uploads/car_images/' ~ car.getPrimaryImage().path) }}" alt="{{ car.registration }}" class="card-img-top">
+                                <img src="{{ car.getPrimaryImage().path }}" alt="{{ car.registration }}" class="card-img-top">
                             {% else %}
                                 <img src="{{ asset('images/coming-soon.jpg') }}" alt="" class="card-img-top">
                             {% endif %}

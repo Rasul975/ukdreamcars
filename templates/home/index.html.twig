@@ -137,7 +137,7 @@
                                     <div class="carousel-inner">
                                         {% for image in car.carImage %}
                                             <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                                <img src="{{ asset('uploads/car_images/' ~ image.path) }}" class="d-block w-100" alt="Car Image">
+                                                <img src="{{ image.path }}" class="d-block w-100" alt="Car Image">
                                             </div>
                                         {% endfor %}
                                     </div>

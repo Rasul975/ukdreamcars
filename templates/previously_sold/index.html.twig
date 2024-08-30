@@ -101,7 +101,7 @@
                 <div class="row align-items-center">
                     <div class="col-12 col-lg-4 car-image-container">
                         {% if car.getPrimaryImage() %}
-                            <img class="img-fluid w-100" src="{{ asset('uploads/car_images/' ~ car.getPrimaryImage().path) }}" alt="{{ car.registration }}">
+                            <img class="img-fluid w-100" src="{{ car.getPrimaryImage().path }}" alt="{{ car.registration }}">
                         {% else %}
                             <img class="img-fluid w-100" src="{{ asset('images/coming-soon.jpg') }}" alt="">
                         {% endif %}
